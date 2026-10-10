@@ -1,0 +1,19 @@
+<%# locals: ad:, note:, clicks: %>
+<section aria-labelledby="<%= ad %>-clicks-heading">
+  <h2 id="<%= ad %>-clicks-heading"><%= ad %> ad clicks</h2>
+  <% if clicks %>
+    <p class="admin-dashboard__metric-note"><%= note %></p>
+    <dl class="admin-dashboard__grid">
+      <div class="admin-dashboard__metric">
+        <dt>clicks</dt>
+        <dd><%= number_with_delimiter(clicks[:total]) %></dd>
+      </div>
+      <div class="admin-dashboard__metric">
+        <dt>people who clicked</dt>
+        <dd><%= number_with_delimiter(clicks[:people]) %></dd>
+      </div>
+    </dl>
+  <% else %>
+    <p class="admin-dashboard__metric-note">click tracking is off here: AHOY_DB_URL isn't set, so no events are stored</p>
+  <% end %>
+</section>
