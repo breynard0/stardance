@@ -162,12 +162,19 @@ class Admin::BukuX3EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "the takeover says when ad clicks are not being stored" do
+  test "the takeover says when crescent ad clicks are not being stored" do
     sign_in @admin
     get admin_jim_takeover_path
     assert_response :success
     assert_select "#crescent-clicks-heading", text: "crescent ad clicks"
+    assert_includes response.body, "click tracking is off here"
+  end
+
+  test "the takeover says when mipmap ad clicks are not being stored" do
+    sign_in @admin
+    get admin_jim_takeover_path
+    assert_response :success
     assert_select "#mipmap-clicks-heading", text: "mipmap ad clicks"
-    assert_select ".admin-dashboard__metric-note", text: /click tracking is off here/, count: 2
+    assert_includes response.body, "click tracking is off here"
   end
 end

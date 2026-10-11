@@ -4,8 +4,8 @@ class Admin::BukuX3EventsController < Admin::ApplicationController
     @buku_discoveries = BukuX3::Assignment.discovered_counts
     @buku_event = BukuX3::Event.current || BukuX3::Event.new
     @buku_daily_shippers = @buku_event.daily_active_shippers.reverse
-    @crescent_clicks = ad_clicks("crescent_promo_clicked")
-    @mipmap_clicks = ad_clicks(DiscoverRail::MipmapPromoWidget::CLICK_EVENT)
+    @crescent_clicks = crescent_promo_clicks
+    @mipmap_clicks = mipmap_promo_clicks
   end
 
   def update
@@ -42,10 +42,17 @@ class Admin::BukuX3EventsController < Admin::ApplicationController
   private
 
   # Nil where Ahoy has no database of its own: events are never stored there.
-  def ad_clicks(event_name)
+  def crescent_promo_clicks
     return if ENV["AHOY_DB_URL"].blank?
 
-    clicks = Ahoy::Event.where(name: event_name)
+    clicks = Ahoy::Event.where(name: "crescent_promo_clicked")
+    { total: clicks.count, people: clicks.distinct.count(:user_id) }
+  end
+
+  def mipmap_promo_clicks
+    return if ENV["AHOY_DB_URL"].blank?
+
+    clicks = Ahoy::Event.where(name: DiscoverRail::MipmapPromoWidget::CLICK_EVENT)
     { total: clicks.count, people: clicks.distinct.count(:user_id) }
   end
 end
