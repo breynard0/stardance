@@ -98,6 +98,11 @@
       transparent 1.5px
     );
     background-size: 24px 24px;
+    -webkit-mask-image: radial-gradient(
+      circle at var(--mipmap-promo-iris-x, 50%) var(--mipmap-promo-iris-y, 50%),
+      transparent var(--mipmap-promo-iris),
+      #000 calc(var(--mipmap-promo-iris) + 1px)
+    );
     mask-image: radial-gradient(
       circle at var(--mipmap-promo-iris-x, 50%) var(--mipmap-promo-iris-y, 50%),
       transparent var(--mipmap-promo-iris),
