@@ -11,7 +11,7 @@ class DiscoverRail::MipmapPromoWidgetTest < ViewComponent::TestCase
   test "renders the spinning logo as a tracked link to mipmap" do
     render_inline(DiscoverRail::MipmapPromoWidget.new)
 
-    assert_selector "section.mipmap-promo[data-controller='mipmap-promo']"
+    assert_selector "section.mipmap-promo[data-controller='mipmap-promo'][data-mipmap-promo-url-value='#{DiscoverRail::MipmapPromoWidget::URL}']"
     assert_selector "a.mipmap-promo__card[href='/promos/mipmap']" do
       assert_selector "svg.mipmap-promo__logo[data-mipmap-promo-target='logo'] .mipmap-promo__cog", count: 6
       assert_selector ".mipmap-promo__pitch", text: "You make games. But without an engine? Don't worry, we'll teach you."

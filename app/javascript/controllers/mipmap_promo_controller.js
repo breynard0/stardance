@@ -23,6 +23,7 @@ const PHONE_WIDTH = 600;
 
 export default class extends Controller {
   static targets = ["card", "logo"];
+  static values = { url: String };
 
   connect() {
     this.reduceMotion = window.matchMedia(
@@ -109,7 +110,7 @@ export default class extends Controller {
   }
 
   async launch(event) {
-    if (this.reduceMotion || this.launching) return;
+    if (this.reduceMotion) return;
     if (
       event.button !== 0 ||
       event.metaKey ||
@@ -119,7 +120,18 @@ export default class extends Controller {
     )
       return;
     event.preventDefault();
+    if (this.launching) return;
     this.launching = true;
+    // Count now, even if the visitor leaves during the animation. The final
+    // navigation bypasses this endpoint so the click is only recorded once.
+    fetch(this.cardTarget.href, {
+      headers: { Accept: "application/json" },
+      credentials: "same-origin",
+      cache: "no-store",
+      keepalive: true,
+    }).catch(() => {
+      // Don't retry: the server may have counted a request whose response failed.
+    });
     this.syncLoop();
 
     const scene = this.buildScene();
@@ -129,7 +141,7 @@ export default class extends Controller {
     await this.pull(scene);
     this.reelSpeed = 1;
     await this.close(scene);
-    window.location.assign(this.cardTarget.href);
+    window.location.assign(this.urlValue);
   }
 
   // Lift a copy of the logo into a full-screen overlay, and aim a rope from each cog along the

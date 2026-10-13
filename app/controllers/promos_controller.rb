@@ -9,6 +9,8 @@ class PromosController < ApplicationController
 
   def mipmap
     track_event DiscoverRail::MipmapPromoWidget::CLICK_EVENT
+    return head :no_content if request.format.json?
+
     redirect_to DiscoverRail::MipmapPromoWidget::URL, allow_other_host: true, status: :see_other
   end
 
